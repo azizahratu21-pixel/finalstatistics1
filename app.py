@@ -18,35 +18,53 @@ st.set_page_config(
 # ----------------------
 page_bg = """
 <style>
-body {
-    background-color: #E7F0EC; /* light sage green */
+
+html, body, [class*="css"]  {
+    background-color: #DDE5D5 !important;   
 }
 
-.main > div {
-    background-color: #E7F0EC !important;
+.stApp {
+    background-color: #DDE5D5 !important;
 }
 
-.sidebar .sidebar-content {
-    background-color: #C9DCD3 !important; /* darker sage layer */
+/* Removes the white top navbar/header */
+header[data-testid="stHeader"] {
+    background-color: #DDE5D5 !important;
 }
 
-.stButton>button {
-    background-color: #A9C7B8 !important;
-    color: white !important;
-    border-radius: 8px !important;
+/* Removes the white padding above main content */
+main[data-testid="stMain"] {
+    background-color: #DDE5D5 !important;
+    padding-top: 0 !important;
 }
 
-.stTabs [data-baseweb="tab"] {
-    background-color: #C9DCD3 !important;
+/* Main container background */
+.block-container {
+    background-color: #DDE5D5 !important;
+    padding-top: 1rem !important;
 }
 
-.stTabs [aria-selected="true"] {
-    background-color: #A9C7B8 !important;
-    color: white !important;
+/* Sidebar background */
+[data-testid="stSidebar"] {
+    background-color: #DDE5D5 !important;
 }
+
+/* The darker sage green layer box */
+.feature-box {
+    background-color: #C3D1C0;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+    margin-top: 25px;
+}
+
+/* Optional: remove white gap around sidebar */
+section[data-testid="stSidebar"] > div:first-child {
+    background-color: #DDE5D5 !important;
+}
+
 </style>
 """
-st.markdown(page_bg, unsafe_allow_html=True)
 
 # ----------------------
 # HEADER
@@ -152,3 +170,4 @@ if uploaded:
     st.write(f"- **p-value:** {p:.4f}")
 
 # END
+

@@ -61,7 +61,7 @@ st.markdown(page_bg, unsafe_allow_html=True)
 # ----------------------
 st.title("📊 Statistics 1 – Data Analysis App")
 st.write("This is a data analysis app that allows users to upload a CSV dataset and perform descriptive statistical and correlation analysis. The app provides dataset previews, summary statistics, frequency and percentage tables, visualizations (histograms and boxplots), and evaluates the strength and direction of relationships between numeric variables using Pearson or Spearman correlation, complete with statistical interpretation.")
-st.write("Upload the CSV file here!)
+st.write("Upload the CSV file here!")
 
 # ----------------------
 # FILE UPLOAD
@@ -161,6 +161,7 @@ if uploaded:
     st.write(f"- **p-value:** {p:.4f}")
 
 # END
+
 
 
 

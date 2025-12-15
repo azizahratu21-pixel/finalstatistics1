@@ -54,6 +54,7 @@ section[data-testid="stSidebar"] > div:first-child {
 
 </style>
 """
+st.markdown(page_bg, unsafe_allow_html=True)
 
 # ----------------------
 # HEADER
@@ -159,5 +160,6 @@ if uploaded:
     st.write(f"- **p-value:** {p:.4f}")
 
 # END
+
 
 

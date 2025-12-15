@@ -5,17 +5,6 @@ import pingouin as pg
 import matplotlib.pyplot as plt
 from PIL import Image
 
-# ----------------------
-# PAGE CONFIG
-# ----------------------
-st.set_page_config(
-    page_title="Statistics Project",
-    layout="wide"
-)
-
-# ----------------------
-# PAGE STYLING (sage green)
-# ----------------------
 page_bg = """
 <style>
 
@@ -170,4 +159,5 @@ if uploaded:
     st.write(f"- **p-value:** {p:.4f}")
 
 # END
+
 

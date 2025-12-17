@@ -6,8 +6,14 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from languages import LANG
 
+# ----------------------
+# PAGE CONFIG
+# ----------------------
 st.set_page_config(page_title="Multi Language App")
 
+# ----------------------
+# LANGUAGE STATE
+# ----------------------
 if "lang" not in st.session_state:
     st.session_state.lang = "id"
 
@@ -16,45 +22,35 @@ lang_choice = st.sidebar.radio(
     ["id", "en"],
     index=0 if st.session_state.lang == "id" else 1
 )
-
 st.session_state.lang = lang_choice
 
 T = LANG[st.session_state.lang]
 
+# ----------------------
+# CSS
+# ----------------------
 page_bg = """
 <style>
-
 html, body, [class*="css"]  {
     background-color: #DDE5D5 !important;   
 }
-
 .stApp {
     background-color: #DDE5D5 !important;
 }
-
-/* Removes the white top navbar/header */
 header[data-testid="stHeader"] {
     background-color: #DDE5D5 !important;
 }
-
-/* Removes the white padding above main content */
 main[data-testid="stMain"] {
     background-color: #DDE5D5 !important;
     padding-top: 0 !important;
 }
-
-/* Main container background */
 .block-container {
     background-color: #DDE5D5 !important;
     padding-top: 1rem !important;
 }
-
-/* Sidebar background */
 [data-testid="stSidebar"] {
     background-color: #DDE5D5 !important;
 }
-
-/* The darker sage green layer box */
 .feature-box {
     background-color: #C3D1C0;
     padding: 25px;
@@ -62,12 +58,9 @@ main[data-testid="stMain"] {
     box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
     margin-top: 25px;
 }
-
-/* Optional: remove white gap around sidebar */
 section[data-testid="stSidebar"] > div:first-child {
     background-color: #DDE5D5 !important;
 }
-
 </style>
 """
 st.markdown(page_bg, unsafe_allow_html=True)
@@ -75,71 +68,77 @@ st.markdown(page_bg, unsafe_allow_html=True)
 # ----------------------
 # HEADER
 # ----------------------
-st.title("📊 Statistics 1 – Data Analysis App")
-st.write("This app provides dataset previews, summary statistics, frequency and percentage tables, visualizations (histograms and boxplots), and evaluates the strength and direction of relationships between numeric variables using Pearson or Spearman correlation, complete with interpretation.")
+st.title(T["app_title"])
+st.write(T["app_desc"])
 
 # ----------------------
 # FILE UPLOAD
 # ----------------------
-uploaded = st.file_uploader("Upload your CSV file", type=["csv"])
+uploaded = st.file_uploader(T["upload"], type=["csv"])
 
 if uploaded:
     df = pd.read_csv(uploaded)
-    st.subheader("Preview of Dataset")
+
+    st.subheader(T["preview"])
     st.dataframe(df)
 
     # ----------------------
-    # SELECT X and Y VARIABLES
+    # SELECT VARIABLES
     # ----------------------
-    numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
+    numeric_cols = df.select_dtypes(include=["int64", "float64"]).columns.tolist()
 
-    st.subheader("Select Variables for Analysis")
+    st.subheader(T["select_vars"])
 
     col1, col2 = st.columns(2)
     with col1:
-        X_var = st.selectbox("Select X variable", numeric_cols)
+        X_var = st.selectbox(T["select_x"], numeric_cols)
     with col2:
-        Y_var = st.selectbox("Select Y variable", numeric_cols)
+        Y_var = st.selectbox(T["select_y"], numeric_cols)
 
     # ----------------------
     # DESCRIPTIVE STATISTICS
     # ----------------------
-    st.subheader("📌 Descriptive Statistics (Each Item + Composite Scores)")
-
+    st.subheader(T["desc_stats"])
     desc = df.describe().T
     st.dataframe(desc)
 
-    # frequency tables
-    st.subheader("Frequency & Percentage Tables")
+    # ----------------------
+    # FREQUENCY TABLES
+    # ----------------------
+    st.subheader(T["freq_table"])
     for col in numeric_cols:
         st.write(f"### {col}")
-        freq = df[col].value_counts().rename("Frequency")
-        perc = df[col].value_counts(normalize=True).rename("Percentage")
+        freq = df[col].value_counts().rename(T["frequency"])
+        perc = df[col].value_counts(normalize=True).rename(T["percentage"])
         st.dataframe(pd.concat([freq, perc], axis=1))
 
-    # histograms
-    st.subheader("📊 Histograms")
+    # ----------------------
+    # HISTOGRAMS
+    # ----------------------
+    st.subheader(T["histogram"])
     for col in numeric_cols:
         fig, ax = plt.subplots()
         ax.hist(df[col], bins=7)
-        ax.set_title(f"Histogram of {col}")
+        ax.set_title(f"{T['hist_of']} {col}")
         st.pyplot(fig)
 
-    # boxplots
-    st.subheader("📦 Boxplots")
+    # ----------------------
+    # BOXPLOTS
+    # ----------------------
+    st.subheader(T["boxplot"])
     for col in numeric_cols:
         fig, ax = plt.subplots()
         ax.boxplot(df[col])
-        ax.set_title(f"Boxplot of {col}")
+        ax.set_title(f"{T['box_of']} {col}")
         st.pyplot(fig)
 
     # ----------------------
-    # CORRELATION ANALYSIS
+    # CORRELATION
     # ----------------------
-    st.subheader("🔗 Association Analysis (Correlation)")
+    st.subheader(T["correlation"])
 
     method = st.selectbox(
-        "Select correlation method",
+        T["select_method"],
         ["Pearson", "Spearman"]
     )
 
@@ -148,34 +147,35 @@ if uploaded:
     else:
         result = pg.corr(df[X_var], df[Y_var], method="spearman")
 
-    st.write("### Correlation Output")
+    st.write(T["corr_output"])
     st.dataframe(result)
 
-    # Interpretation
+    # ----------------------
+    # INTERPRETATION
+    # ----------------------
     r = float(result["r"])
     p = float(result["p-val"])
 
-    st.write("### Interpretation")
+    st.write(T["interpretation"])
 
-    # strength
     if abs(r) < 0.2:
-        strength = "Very Weak"
+        strength = T["very_weak"]
     elif abs(r) < 0.4:
-        strength = "Weak"
+        strength = T["weak"]
     elif abs(r) < 0.6:
-        strength = "Moderate"
+        strength = T["moderate"]
     elif abs(r) < 0.8:
-        strength = "Strong"
+        strength = T["strong"]
     else:
-        strength = "Very Strong"
+        strength = T["very_strong"]
 
-    direction = "Positive" if r > 0 else "Negative"
+    direction = T["positive"] if r > 0 else T["negative"]
 
-    st.write(f"- **Direction:** {direction}")
-    st.write(f"- **Strength:** {strength}")
-    st.write(f"- **p-value:** {p:.4f}")
+    st.write(f"- **{T['direction']}**: {direction}")
+    st.write(f"- **{T['strength']}**: {strength}")
+    st.write(f"- **{T['p_value']}**: {p:.4f}")
 
-# END
+
 
 
 

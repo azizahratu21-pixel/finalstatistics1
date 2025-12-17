@@ -4,23 +4,21 @@ import numpy as np
 import pingouin as pg
 import matplotlib.pyplot as plt
 from PIL import Image
-from language import LANG
+from languages import LANG
 
 st.set_page_config(page_title="Multi Language App")
 
-# init language
 if "lang" not in st.session_state:
     st.session_state.lang = "id"
 
-# language switch (sidebar)
 lang_choice = st.sidebar.radio(
     "Language / Bahasa",
     ["id", "en"],
-    format_func=lambda x: "Indonesia" if x == "id" else "English"
+    index=0 if st.session_state.lang == "id" else 1
 )
+
 st.session_state.lang = lang_choice
 
-# active language
 T = LANG[st.session_state.lang]
 
 page_bg = """
@@ -178,6 +176,7 @@ if uploaded:
     st.write(f"- **p-value:** {p:.4f}")
 
 # END
+
 
 
 

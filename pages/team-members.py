@@ -1,6 +1,9 @@
 import streamlit as st
 from PIL import Image
 import os
+from languages import LANG
+
+T = LANG[st.session_state.lang]
 
 page_bg = """
 <style>
@@ -119,4 +122,5 @@ for member in team:
         st.write("**Contributions:**")
         for item in member["contribution"]:
             st.write(f"- {item}")
+
     st.markdown("---")

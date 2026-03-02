@@ -153,8 +153,8 @@ if uploaded:
     # ----------------------
     # INTERPRETATION
     # ----------------------
-    r = float(result["r"])
-    p = float(result["p-val"])
+    r = float(result["r"].iloc[0])
+    p = float(result["p-val"].iloc[0])
 
     st.write(T["interpretation"])
 
@@ -174,6 +174,7 @@ if uploaded:
     st.write(f"- **{T['direction']}**: {direction}")
     st.write(f"- **{T['strength']}**: {strength}")
     st.write(f"- **{T['p_value']}**: {p:.4f}")
+
 
 
 

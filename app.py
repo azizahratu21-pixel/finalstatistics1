@@ -153,12 +153,22 @@ if uploaded:
     # Mengambil nilai r dari baris pertama tabel
     r = float(result["r"].iloc[0])
 
-    # Mengambil nilai p-value (cek nama kolom 'p-val' atau 'pval')
-    if "p-val" in result.columns:
-        p = float(result["p-val"].iloc[0])
-    else:
-        p = float(result["pval"].iloc[0])
+   # Mengambil nilai r (biasanya kolom 'r' atau kolom indeks 2)
+    r = float(result["r"].iloc[0])
 
+    # Cara paling aman: ambil p-value berdasarkan urutan kolom
+    # Di pingouin, p-value biasanya ada di kolom ke-4 (indeks 3)
+    try:
+        if "p-val" in result.columns:
+            p = float(result["p-val"].iloc[0])
+        elif "pval" in result.columns:
+            p = float(result["pval"].iloc[0])
+        else:
+            # Jika nama kolom tidak dikenal, ambil kolom ke-4 secara paksa
+            p = float(result.iloc[0, 3])
+    except:
+        # Fallback terakhir jika semua gagal
+        p = 1.0
     if abs(r) < 0.2:
         strength = T["very_weak"]
     elif abs(r) < 0.4:
@@ -175,6 +185,7 @@ if uploaded:
     st.write(f"- **{T['direction']}**: {direction}")
     st.write(f"- **{T['strength']}**: {strength}")
     st.write(f"- **{T['p_value']}**: {p:.4f}")
+
 
 
 

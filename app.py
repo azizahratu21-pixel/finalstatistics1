@@ -150,13 +150,14 @@ if uploaded:
     st.write(T["corr_output"])
     st.dataframe(result)
 
-    # ----------------------
-    # INTERPRETATION
-    # ----------------------
+    # Mengambil nilai r dari baris pertama tabel
     r = float(result["r"].iloc[0])
-    p = float(result["p-val"].iloc[0])
 
-    st.write(T["interpretation"])
+    # Mengambil nilai p-value (cek nama kolom 'p-val' atau 'pval')
+    if "p-val" in result.columns:
+        p = float(result["p-val"].iloc[0])
+    else:
+        p = float(result["pval"].iloc[0])
 
     if abs(r) < 0.2:
         strength = T["very_weak"]
@@ -174,6 +175,7 @@ if uploaded:
     st.write(f"- **{T['direction']}**: {direction}")
     st.write(f"- **{T['strength']}**: {strength}")
     st.write(f"- **{T['p_value']}**: {p:.4f}")
+
 
 
 
